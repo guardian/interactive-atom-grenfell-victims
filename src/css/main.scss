@@ -1,8 +1,12 @@
 @import "mq";
 @import "fonts";
+@import "palette";
 
 // Uncomment for embeds
-//@import "embed";
+@import "embed";
+
+@import "picGrid";
+@import "detailView";
 
 // Uncomment for full screen (including immersive article main media)
 //@import "fullscreen";

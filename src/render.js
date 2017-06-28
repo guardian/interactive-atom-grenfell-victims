@@ -2,7 +2,7 @@ import rp from 'request-promise-native'
 import Handlebars from 'handlebars'
 import mainTemplate from './src/templates/main.html!text'
 import gridPicTemplate from './src/templates/gridPic.html!text'
-import slideDrawerTemplate from './src/templates/slideDrawer.html!text'
+import detailItemTemplate from './src/templates/detailItem.html!text'
 
 let mainEl; 
 
@@ -18,13 +18,8 @@ export async function render() {
 	var compiledHTML =	compileHTML(data)
 
    return compiledHTML;
-    
     //let picGridHTML = Mustache.render(picGridHTML, { "sections": data.sections });
-
-
 }
-
-
 
 
 
@@ -36,13 +31,12 @@ function formatData(data) {
 
     output.map((obj) => {
         obj.ref = count;
+        obj.formatName = obj.name.split(",")[0];
         // obj.spriteClass = "obj-"+obj.name.replace(/("|')/g, "").replace(" ", "");
         // obj.photo_filename = encodeURIComponent(obj.name.replace(/'/, '') + '.jpg');
         count++;
     })
-
     return output;
-
 }
 
 function compileHTML(dataIn){
@@ -53,7 +47,7 @@ function compileHTML(dataIn){
 	
 	Handlebars.registerPartial({
         'gridPic': gridPicTemplate,
-        'slideDrawer': slideDrawerTemplate
+        'detailItem': detailItemTemplate
     });
 
 
@@ -66,7 +60,7 @@ function compileHTML(dataIn){
 
     var newHTML = content(data);
 
-    console.log(data)
+   // console.log(data)
 
     return newHTML
 }
