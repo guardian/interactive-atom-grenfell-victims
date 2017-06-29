@@ -282,7 +282,7 @@ gulp.task('resize-images', async function () {
         sharp(image)
           .resize(200, 200)
           .toFile("./.build/assets/images/" + id + ".jpg", (err, info) => {
-            console.log(err, info);
+            if(err) console.log(err);
           });
     }
 });
