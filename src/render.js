@@ -32,6 +32,7 @@ function formatData(data) {
     output.map((obj) => {
         obj.ref = count;
         obj.formatName = obj.name.split(",")[0];
+        obj.id = obj.name.replace(/[^0-9a-z]/gi, '');
         // obj.spriteClass = "obj-"+obj.name.replace(/("|')/g, "").replace(" ", "");
         // obj.photo_filename = encodeURIComponent(obj.name.replace(/'/, '') + '.jpg');
         count++;
@@ -59,8 +60,6 @@ function compileHTML(dataIn){
             );
 
     var newHTML = content(data);
-
-   // console.log(data)
 
     return newHTML
 }

@@ -19,6 +19,8 @@ import rp from 'request-promise-native'
 import runSequence from 'run-sequence'
 import source from 'vinyl-source-stream'
 
+import sharp from 'sharp';
+
 const browser = browserSync.create();
 
 const buildDir = '.build';
@@ -124,7 +126,7 @@ gulp.task('build:js.main', buildJS('main.js'));
 gulp.task('build:js.app', buildJS('app.js'));
 gulp.task('build:js', ['build:js.main', 'build:js.app']);
 
-gulp.task('build:html', cb => {
+gulp.task('build:html', ['resize-images'], cb => {
     try {
         let render = requireUncached('./src/render.js').render;
 
@@ -258,3 +260,30 @@ gulp.task('log', () => {
 
     return Promise.all([log('live'), log('preview')]);
 });
+
+gulp.task('resize-images', async function () {
+    fs.mkdirSync("./.build");
+    fs.mkdirSync("./.build/assets");
+    fs.mkdirSync("./.build/assets/images")
+
+    let data = (await rp({
+        uri: 'https://interactive.guim.co.uk/docsdata-test/1K896qTOpgJQhG2IfGAChZ1WZjQAYn7-i869tA5cKaVU.json',
+        json: true
+    })).sheets.people;
+
+    for (let i in data) {
+        let url = data[i]["grid_photo"];
+        let id = data[i]["name"].replace(/[^0-9a-z]/gi, '');
+        let image = await rp({
+            uri: url,
+            encoding: null
+        });
+
+        sharp(image)
+          .resize(200, 200)
+          .toFile("./.build/assets/images/" + id + ".jpg", (err, info) => {
+            console.log(err, info);
+          });
+    }
+});
+
