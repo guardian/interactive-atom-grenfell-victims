@@ -1,18 +1,70 @@
-<div id="mainContent"> 
-
-	{{#each gridItems}}
-				{{> gridPic }}
-	{{/each}}
+ <div id="gv-content-container">
 
 
-</div>
+		{{#each pageSections}}
+			<section class="facewall-section">
+				<div class="gv-section-bullet-wrapper">
+					<div class="gv-section-bullet">{{sortOn}}</div>
+				</div>
+				
+				<div class="facewall-container">
+
+					{{#each objArr}}
+								{{> gridPic }}
+					{{/each}}
+
+				</div>
+
+			</section>
+		{{/each}}
 
 
-<div class="gv-detail-overlay" id="detailOverlay"> 
-	<div class="gv-detail-items-list" id="detailScroll">
-	{{#each gridItems}}
-				{{> detailItem }}
-	{{/each}}
+
+
+	<div class="gv-detail-overlay" id="detailOverlay"> 
+		<div class="gv-detail-scroll-area" id="detailScroll"
+			<div class="gv-detail-items-list" id="detailList">
+				{{#each pageSections}}
+					<div class="gv-section-bullet-wrapper">
+						<div class="gv-section-bullet">{{sortOn}}</div>
+					</div>
+					{{#each objArr}}
+								{{> detailItem }}
+					{{/each}}
+
+				{{/each}}
+			</div>
+
+			<div class="close-overlay-btn"></div>
+
+		</div>
+
+		
 	</div>
 
+
+
+
+
+<!-- 	<div id="detail-overlay-container">
+	    <div id="detail-scroll-area"  id="detailScroll">
+		    <div class="detail-container">
+				{{#each sections}}
+					<div class="detail-section-container">
+						<p class="detail-section-title"><strong>{{title}}</strong></p>
+					{{#each items}}
+						{{>itemDetail}}
+					{{/each}}
+					</div>
+				{{/each}}
+			</div>
+		</div>
+		<div class="close-overlay-btn"></div>
+	</div> -->
+
+
+
+
+
+	
 </div>

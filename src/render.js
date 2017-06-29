@@ -1,11 +1,12 @@
 import rp from 'request-promise-native'
 import Handlebars from 'handlebars'
+import {groupBy,sortByKey} from './js/libs/arrayObjectUtils.js'
 import mainTemplate from './src/templates/main.html!text'
 import gridPicTemplate from './src/templates/gridPic.html!text'
 import detailItemTemplate from './src/templates/detailItem.html!text'
 
 let mainEl; 
-
+let sections;
 
 export async function render() {
     let data = formatData(await rp({
@@ -13,12 +14,10 @@ export async function render() {
         json: true
     }));
 
-   //	console.log(data) 
-
-	var compiledHTML =	compileHTML(data)
+   var compiledHTML = compileHTML(data)
 
    return compiledHTML;
-    //let picGridHTML = Mustache.render(picGridHTML, { "sections": data.sections });
+
 }
 
 
@@ -32,19 +31,54 @@ function formatData(data) {
     output.map((obj) => {
         obj.ref = count;
         obj.formatName = obj.name.split(",")[0];
-        // obj.spriteClass = "obj-"+obj.name.replace(/("|')/g, "").replace(" ", "");
-        // obj.photo_filename = encodeURIComponent(obj.name.replace(/'/, '') + '.jpg');
+        obj.grouping = obj.name.charAt(0).toUpperCase();
+       
         count++;
+
     })
+
+  output.sort((obj1, obj2) => {return obj1.name > obj2.name});
+
+    
     return output;
+}  
+
+
+
+function sortByKeys(obj) {
+    let keys = Object.keys(obj),i, len = keys.length;
+
+    keys.sort();
+
+   
+    var a = []
+    
+
+    for (i = 0; i < len; i++) {
+
+        let k = keys[i];
+        let t = {}
+        t.sortOn = k;
+        t.objArr = obj[k]
+        a.push(t);
+    }
+
+    return a;
+    
+
 }
+
 
 function compileHTML(dataIn){
 
+    sections = groupBy(dataIn, 'grouping'); 
+    sections = sortByKeys(sections);
+
 	var data = {
-		gridItems : dataIn
+        pageSections : sections
 	}
 	
+
 	Handlebars.registerPartial({
         'gridPic': gridPicTemplate,
         'detailItem': detailItemTemplate
@@ -58,9 +92,7 @@ function compileHTML(dataIn){
                         }
             );
 
-    var newHTML = content(data);
-
-   // console.log(data)
+    var newHTML = content(data); 
 
     return newHTML
 }

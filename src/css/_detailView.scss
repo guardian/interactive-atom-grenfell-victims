@@ -1,49 +1,141 @@
 .gv-detail-overlay{
-	position:fixed;
+	position: fixed;
+
 	top:0;
 	left: 100%;
-	width:100%;
+	width:280px;
 	height:100%; 
 	transform: translateX(100%);
+
+	@include mq(desktop){
+    	width:460px;
+    }
 
 	&.opened{
 		transform: translateX(-100%);
 	}
 }
 
-.gv-detail-items-list{
-	position: absolute;
-	width:calc(100% - 60px);
-    top: 0;
+.gv-detail-scroll-area{
+		position: absolute;
+		padding:0 10px 0 20px;
+		top:0;
+		left:0;
+		right:0;
+		bottom:0;
+		overflow-y:scroll;
+		-webkit-overflow-scrolling: touch;
+		background-color: #FFF;
+    	box-shadow:-2px 0 6px rgba(0,0,0,0.2);
+}
 
-    right: 0;
+.gv-detail-items-list{	
+	
+	width:280px;
+    
 
-    bottom: 0;
-    overflow-y: scroll;
-    background-color: #FFF;
+    @include mq(desktop){
+    	width:460px;
+    }
 }
 
 .gv-detail-item{
 	display: block;	
-
 	height:auto; 
-	margin:10px;
+	padding-top:12px;
+	margin:0 10px 36px;
+	opacity:0.33;
+
+	&.selected{
+		opacity: 1;
+	}
+	// border-top: 1px solid $neutral-4;
+
+
+}
+.gv-detail-item:first-child{
+	border: none;
 }
 
-.gv-detail-text1,.gv-detail-text2{
+.gv-detail-text1,.gv-detail-text2, .gv-detail-head-text{
 	@include fs-textSans(3);
+
+	h1{
+		@include fs-header(3);
+
+	}
+}
+
+.gv-detail-head-text{
+	height:80px;
+
+	margin-left:12px;
+
+	h1{
+		@include fs-header(1);
+		color: $neutral-1;
+		@include mq(desktop){
+				@include fs-header(4);
+		}
+	}
+
+	
+	
+}
+
+.gv-detail-main{
+	width:100%;
+	height:80px;
+	margin:0 0 10px 0;
 }
 
 .gv-detail-description{
-	@include fs-textSans(3);
-	color: $neutral-3;
+	@include fs-bodyCopy(1);
+		color: $neutral-2;
+	@include mq(desktop){
+		@include fs-bodyCopy(2);
+	}
+
+	
 }
 
 .gv-detail-img{
-	width:60px;
-	padding-bottom:60px;
+	width:80px;
+	margin-right: 10px;
+	float:left;
+	padding-bottom:80px;
 	background:#333;
 	background-size:cover;
 	background-position: center;
+	border: 3px solid $selected-color;
 	border-radius:99999px;
+	-webkit-filter: grayscale(100%); /* Safari 6.0 - 9.0 */
+	filter: grayscale(100%);
+
+	&.selected{
+		-webkit-filter: none; /* Safari 6.0 - 9.0 */
+		filter: none;
+	}
+}
+
+.close-overlay-btn {
+    width: 44px;
+    height: 44px;
+    background-color: #333;
+    background-image: url('<%= path %>./assets/arrow.svg');
+    border-radius: 9999px;
+    position: absolute;
+    bottom: 48px;
+    left: -21px;
+    background-size: 60%;
+    background-repeat: no-repeat;
+    background-position: center;
+    transform: rotate(180deg);
+    cursor:pointer;
+
+
+
+}
+.close-overlay-btn:hover{
+	background-color:$selected-color;
 }

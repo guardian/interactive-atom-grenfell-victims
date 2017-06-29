@@ -2,44 +2,73 @@ let detailOverlay;
 
 function init(){
     detailOverlay = document.getElementById("detailOverlay");
-	addListeners()
+	  addListeners();
+
+
+
 }
 
 function addListeners(){
-	[].slice.apply(document.querySelectorAll('.gv-pic-grid-item')).forEach(el => {
-            el.addEventListener('click', () => openDetailContainer(el));         
+	[].slice.apply(document.querySelectorAll('.facewall-item')).forEach(el => {
+            var elId = el.getAttribute("id");
+            el.addEventListener('click', () => openDetailContainer(elId));         
     });
 
     detailOverlay.addEventListener('click', function(){ detailOverlay.classList.remove('opened'); } ); 
 }
 
 
+function openDetailContainer(elId){    
+    var bannerHeaderEl = document.getElementById("bannerandheader");
+    var detailScrollEl = document.getElementById('detailScroll');
+
+    if(bannerHeaderEl){ isElementVisible(bannerHeaderEl) ? detailScrollEl.style.paddingTop = bannerHeaderEl.offsetHeight + "px" : detailScrollEl.style.paddingTop = 0 }
+
+    setHighLight(elId);
+
+    var detailContainerEl = document.getElementById('detailOverlay');    
+    var itemDetailEl = document.getElementById('detailItem_'+elId.split("_")[1]);
+    var itemDetailOffset = itemDetailEl.getBoundingClientRect().top;
+    var parentContainerOffset = document.getElementById('detailScroll').getBoundingClientRect().top;
+    var parentContainerScroll  = document.getElementById('detailScroll').scrollTop;
+    var oldOffset = parentContainerScroll;
+    var newOffset = itemDetailOffset - parentContainerOffset + parentContainerScroll - bannerHeaderEl.offsetHeight;
+
+    //document.querySelector('.interactive-container').className += ' detail-panel-opened';
+    detailOverlay.classList.add('opened');   
+    document.getElementById('detailScroll').scrollTop = newOffset;
+
+	
+}
 
 
+function isElementVisible(el) {
+    var rect = el.getBoundingClientRect(),
+    vWidth = window.innerWidth || doc.documentElement.clientWidth,
+    vHeight = window.innerHeight || doc.documentElement.clientHeight,
+    efp = function (x, y) { return document.elementFromPoint(x, y) };     
+
+    return(rect.height * -1 < rect.top)
+}
+
+function setHighLight(elId){
+  let ref = elId.split("_")[1];
+  [].slice.apply(document.getElementsByClassName('item-photo selected')).forEach(el => {  
+            el.classList.remove('selected');         
+  });
+
+  [].slice.apply(document.getElementsByClassName('gv-detail-img selected')).forEach(el => {  
+            el.classList.remove('selected');         
+  });
+
+  [].slice.apply(document.getElementsByClassName('gv-detail-item selected')).forEach(el => {  
+            el.classList.remove('selected');         
+  });
     
-function openDetailContainer(el){
-		document.getElementById('detailScroll').scrollTop = 0;
-		
-        let detailEl = document.getElementById('detailItem_'+el.getAttribute("id").split("_")[1]);
-
-        var mainContentOffset = document.getElementById('mainContent').offsetTop;	
-        var gridItemOffSet = el.offsetTop;
-
-        console.log(mainContentOffset, gridItemOffSet)
-
-        var detailOffset = detailEl.offsetTop;
-        var parentContainerOffset = document.getElementById('detailScroll').offsetTop;
-        var parentContainerScroll  = document.getElementById('detailScroll').scrollTop;
-        var oldOffset = parentContainerScroll;
-
-        
-        var newOffset = detailOffset - parentContainerOffset + parentContainerScroll - gridItemOffSet - 16;
-        
-        detailOverlay.classList.add('opened');   
-        
-       document.getElementById('detailScroll').scrollTop = newOffset;
-
-       console.log(document.getElementById('detailScroll').scrollTop)
+  document.getElementById(elId).getElementsByClassName("item-photo")[0].classList.add('selected');
+  document.getElementById("detailItemImg_"+ref).classList.add('selected'); 
+  document.getElementById("detailItem_"+ref).classList.add('selected'); 
+  
 }
 
 

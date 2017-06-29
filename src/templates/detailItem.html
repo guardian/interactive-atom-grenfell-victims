@@ -1,7 +1,15 @@
 <div class="gv-detail-item" id="detailItem_{{ref}}">
-<div class="gv-detail-img" style="background-image:url({{grid_photo}})"></div>
-<div class="gv-detail-text1">{{formatName}}</div>
-<!-- <div class="gv-detail-text2">Age and other details here if needed</div> -->
-<div class="gv-detail-description">{{bio}}</div>
 
+
+
+<div class="gv-detail-main">
+
+	<div class="gv-detail-img selected" style="background-image:url({{grid_photo}})" id="detailItemImg_{{ref}}"></div>
+	<div class="gv-detail-head-text selected" id="detailItemHead_{{ref}}"><h1>{{formatName}}</h1></div>
+	<!-- <div class="gv-detail-text2">Age and other details here if needed</div> -->
+	
+</div>
+<div class="gv-detail-text-wrapper">
+	<div class="gv-detail-description selected">{{bio}}</div>
+</div>
 </div>

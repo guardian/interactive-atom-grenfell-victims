@@ -3,15 +3,37 @@
 @import "palette";
 
 // Uncomment for embeds
-@import "embed";
+// @import "embed";
+
+// Uncomment for full screen (including immersive article main media)
+// @import "fullscreen";
 
 @import "picGrid";
 @import "detailView";
 
-// Uncomment for full screen (including immersive article main media)
-//@import "fullscreen";
-
 .element-atom,
 .interactive-atom {
     margin: 0 !important;
+}
+
+.gv-main-column{
+	width:100%;
+	height:auto;
+	max-width:620px;
+	@include mq(leftCol){
+		margin-left:160px;
+	}
+	@include mq(wide){
+		margin-left:240px;
+	}
+	
+}
+
+.dig-slice_fixed{
+	position: fixed;
+	top:0;
+}
+
+.dig-slice_relative{
+	position: relative;
 }
