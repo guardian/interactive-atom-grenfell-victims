@@ -49,6 +49,7 @@
   },
   "dependencies": {
     "handlebars": "^4.0.10",
+    "mkdirp": "^0.5.1",
     "sharp": "^0.18.1"
   }
 }

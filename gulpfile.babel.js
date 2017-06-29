@@ -20,6 +20,7 @@ import runSequence from 'run-sequence'
 import source from 'vinyl-source-stream'
 
 import sharp from 'sharp';
+import mkdirp from 'mkdirp';
 
 const browser = browserSync.create();
 
@@ -38,6 +39,8 @@ const path = isDeploy ? `${cdnUrl}/${s3VersionPath}` : '.';
 const babelrc = JSON.parse(fs.readFileSync('.babelrc'));
 const presets = (babelrc.presets || []).concat(babelrc.env.client.presets);
 const plugins = (babelrc.plugins || []).concat(babelrc.env.client.plugins);
+
+import { loadData } from './src/render'
 
 const rollupPlugins = [
     require('rollup-plugin-json')(),
@@ -262,28 +265,21 @@ gulp.task('log', () => {
 });
 
 gulp.task('resize-images', async function () {
-    fs.mkdirSync("./.build");
-    fs.mkdirSync("./.build/assets");
-    fs.mkdirSync("./.build/assets/images")
+    mkdirp("./.build/assets/images", async function() {
+        let data = await loadData();
 
-    let data = (await rp({
-        uri: 'https://interactive.guim.co.uk/docsdata-test/1K896qTOpgJQhG2IfGAChZ1WZjQAYn7-i869tA5cKaVU.json',
-        json: true
-    })).sheets.people;
+        for (let i in data) {
+            let image = await rp({
+                uri: data[i]["grid_photo"],
+                encoding: null
+            });
 
-    for (let i in data) {
-        let url = data[i]["grid_photo"];
-        let id = data[i]["name"].replace(/[^0-9a-z]/gi, '');
-        let image = await rp({
-            uri: url,
-            encoding: null
-        });
-
-        sharp(image)
-          .resize(200, 200)
-          .toFile("./.build/assets/images/" + id + ".jpg", (err, info) => {
-            if(err) console.log(err);
-          });
-    }
+            sharp(image)
+              .resize(200, 200)
+              .toFile("./.build/assets/images/" + data[i].id + ".jpg", (err, info) => {
+                if(err) console.log(err);
+              });
+        }
+    });
 });
 

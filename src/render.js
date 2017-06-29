@@ -4,28 +4,20 @@ import mainTemplate from './src/templates/main.html!text'
 import gridPicTemplate from './src/templates/gridPic.html!text'
 import detailItemTemplate from './src/templates/detailItem.html!text'
 
-let mainEl; 
-
+let mainEl;
 
 export async function render() {
-    let data = formatData(await rp({
-        uri: 'https://interactive.guim.co.uk/docsdata-test/1K896qTOpgJQhG2IfGAChZ1WZjQAYn7-i869tA5cKaVU.json',
-        json: true
-    }));
+    let data = await loadData();
 
-   //	console.log(data) 
+    var compiledHTML = compileHTML(data)
 
-	var compiledHTML =	compileHTML(data)
-
-   return compiledHTML;
+    return compiledHTML;
     //let picGridHTML = Mustache.render(picGridHTML, { "sections": data.sections });
 }
 
-
-
 function formatData(data) {
 
-	let output = data.sheets.people;
+    let output = data.sheets.people;
     // let sectionsCopy = data.sheets.sectionHeads;
     let count = 0;
 
@@ -40,26 +32,35 @@ function formatData(data) {
     return output;
 }
 
-function compileHTML(dataIn){
+function compileHTML(dataIn) {
 
-	var data = {
-		gridItems : dataIn
-	}
-	
-	Handlebars.registerPartial({
+    var data = {
+        gridItems: dataIn
+    }
+
+    Handlebars.registerPartial({
         'gridPic': gridPicTemplate,
         'detailItem': detailItemTemplate
     });
 
 
-    var content = Handlebars.compile( 
-                    mainTemplate,
-                        { 
-                            compat: true                        
-                        }
-            );
+    var content = Handlebars.compile(
+        mainTemplate, {
+            compat: true
+        }
+    );
 
     var newHTML = content(data);
 
     return newHTML
+}
+
+// broke this out into a function so it could also be used in the gulpfile for the image resizing
+export async function loadData() {
+    let data = formatData(await rp({
+        uri: 'https://interactive.guim.co.uk/docsdata-test/1K896qTOpgJQhG2IfGAChZ1WZjQAYn7-i869tA5cKaVU.json',
+        json: true
+    }));
+
+    return data;
 }
