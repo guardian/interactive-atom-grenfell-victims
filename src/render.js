@@ -1,6 +1,6 @@
 import rp from 'request-promise-native'
 import Handlebars from 'handlebars'
-import { groupBy, sortByKey } from './js/libs/arrayObjectUtils.js'
+import { groupBy } from './js/libs/arrayObjectUtils.js'
 import mainTemplate from './src/templates/main.html!text'
 import gridPicTemplate from './src/templates/gridPic.html!text'
 import detailItemTemplate from './src/templates/detailItem.html!text'
@@ -26,6 +26,9 @@ function formatData(data) {
         obj.ref = count;
         obj.formatName = obj.name.split(",")[0];
         obj.sortOn = obj.name.charAt(0).toUpperCase();
+        !obj.age ? obj.age = "unknown" : obj.age = obj.age.toString();
+        !obj.status ? obj.status = "unknown" : obj.status = obj.status.toString();
+
         obj.id = obj.name.replace(/[^0-9a-z]/gi, '');
 
         count++;

@@ -1,12 +1,27 @@
 @import "mq";
 @import "fonts";
 @import "palette";
+
+$gs-baseline:12px;
+$gs-gutter:20px;
+$facewall-bg: $neutral-5;
+$header-support: $neutral-5;
+$bullet-bg: $neutral-2;
+$unselected-color: $neutral-3;
+$selected-color: $multimedia-main-2;
+
 // Uncomment for embeds
 // @import "embed";
 // Uncomment for full screen (including immersive article main media)
 // @import "fullscreen";
 @import "picGrid";
 @import "detailView";
+@import "uxItems";
+
+
+
+
+
 .element-atom,
 .interactive-atom {
     margin: 0 !important;

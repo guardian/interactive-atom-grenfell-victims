@@ -50,6 +50,7 @@
   "dependencies": {
     "babel": "^6.23.0",
     "handlebars": "^4.0.10",
+    "javascript-debounce": "^1.0.0",
     "mkdirp": "^0.5.1",
     "sharp": "^0.18.1"
   }

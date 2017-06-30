@@ -1,38 +1,67 @@
-let detailOverlay;
-let windowWidth;
+import debounce from 'javascript-debounce'
+
+let detailOverlay, mainContainer, windowWidth, shim;
 let isInApp = false;
 
 if(!window){
-    windowWidth = 970;
+    windowWidth = 460;
     isInApp = true;
 }else{
-    window.onresize = addListeners;
+    window.onresize = delayedAdjust;
     windowWidth = window.innerWidth;
 }
-var isMobile = windowWidth < 980 ? true : false;
+var isMobile = windowWidth < 460 ? true : false;
+var isTablet = windowWidth > 459 && windowWidth < 980 ? true : false;
+var isDesktop = windowWidth > 979 ? true : false;
 
+
+var delayedAdjust = debounce(addListeners, 1000);
 
 
 function init() {
     detailOverlay = document.getElementById("detailOverlay");
+    mainContainer = document.getElementById("gv-content-container");
     addListeners();
 }
 
 function addListeners() {
+
+    setShim();
+
     [].slice.apply(document.querySelectorAll('.facewall-item')).forEach(el => {
         var elId = el.getAttribute("id");
         el.addEventListener('click', () => openDetailContainer(el,elId));
     });
 
-    detailOverlay.addEventListener('click', function() { detailOverlay.classList.remove('opened'); });
+    if(isMobile){
+       detailOverlay.addEventListener('click', function() { detailOverlay.classList.remove('opened'); });
+    }
+
+    [].slice.apply(document.querySelectorAll('.cta-button-holder')).forEach(el => {
+          el.addEventListener('click', () => window.open(el.getAttribute("data-link")) );
+    });
+
+    
 }
 
+
+var isMobile = windowWidth < 460 ? true : false;
+var isTablet = windowWidth > 459 && windowWidth < 980 ? true : false;
+var isDesktop = windowWidth > 979 ? true : false;
+
+function setShim(){
+    let newShim = 0;
+    if(isMobile) { newShim = 84 }
+    if(isTablet) { newShim = 109 }
+    if(isDesktop) { newShim = 0 }
+
+    return newShim;
+}
 
 function openDetailContainer(el,elId) {
     var bannerHeaderEl = document.getElementById("bannerandheader");
     var detailScrollEl = document.getElementById('detailScroll');
-
-    let shim = 0;
+    var detailContainerEl = document.getElementById('detailOverlay');
 
 
     if (bannerHeaderEl) {
@@ -40,10 +69,7 @@ function openDetailContainer(el,elId) {
         shim = bannerHeaderEl.offsetHeight;
     }
 
-
-    setHighLight(elId);
-
-    var detailContainerEl = document.getElementById('detailOverlay');
+   
     var itemDetailEl = document.getElementById('detailItem_' + elId.split("_")[1]);
     var itemDetailOffset = itemDetailEl.getBoundingClientRect().top;
     var parentContainerOffset = document.getElementById('detailScroll').getBoundingClientRect().top;
@@ -51,7 +77,7 @@ function openDetailContainer(el,elId) {
     var oldOffset = parentContainerScroll;
     var newOffset = itemDetailOffset - parentContainerOffset + parentContainerScroll - shim;
 
-
+    console.log(shim)
     //document.querySelector('.interactive-container').className += ' detail-panel-opened';
     detailOverlay.classList.add('opened');
     document.getElementById('detailScroll').scrollTop = newOffset;
@@ -61,24 +87,30 @@ function openDetailContainer(el,elId) {
         moveDetail(el, detailContainerEl);       
     }
 
-
-
+    setHighLight(elId);
 }
 
 
 function moveDetail(el, detailContainerEl){
     let sectionRef = (el.getAttribute("section-ref") );
 
-
-
     [].slice.apply(document.querySelectorAll('.main-list-bullet')).forEach(sectionEl => {
         var elRef = sectionEl.getAttribute("section-ref");
-        if(elRef == sectionRef){ detailContainerEl.style.top = (sectionEl.offsetTop+12) +"px" ;}
+        if(elRef == sectionRef){ 
+          detailScroll.classList.remove("add-border-bottom")
+          detailContainerEl.style.top = (sectionEl.offsetTop+12) +"px" ;
+          if(( sectionEl.offsetTop + detailContainerEl.offsetHeight ) > mainContainer.offsetHeight){ 
 
-        console.log("windowWidth",windowWidth)
+              detailScroll.classList.add("add-border-bottom")
+              detailContainerEl.style.top =  (  ((sectionEl.offsetTop -  detailContainerEl.offsetHeight )+13)   +"px"   )
+          
+          }
+
+      }
+       
+        
     });
 
-    
 
 }
 
@@ -110,9 +142,6 @@ function setHighLight(elId) {
     document.getElementById(elId).getElementsByClassName("item-photo")[0].classList.add('selected');
     document.getElementById("detailItemImg_" + ref).classList.add('selected');
     document.getElementById("detailItem_" + ref).classList.add('selected');
-
 }
-
-
 
 init();
