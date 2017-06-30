@@ -19,6 +19,9 @@ import rp from 'request-promise-native'
 import runSequence from 'run-sequence'
 import source from 'vinyl-source-stream'
 
+import sharp from 'sharp';
+import mkdirp from 'mkdirp';
+
 const browser = browserSync.create();
 
 const buildDir = '.build';
@@ -36,6 +39,8 @@ const path = isDeploy ? `${cdnUrl}/${s3VersionPath}` : '.';
 const babelrc = JSON.parse(fs.readFileSync('.babelrc'));
 const presets = (babelrc.presets || []).concat(babelrc.env.client.presets);
 const plugins = (babelrc.plugins || []).concat(babelrc.env.client.plugins);
+
+import { loadData } from './src/render'
 
 const rollupPlugins = [
     require('rollup-plugin-json')(),
@@ -124,7 +129,7 @@ gulp.task('build:js.main', buildJS('main.js'));
 gulp.task('build:js.app', buildJS('app.js'));
 gulp.task('build:js', ['build:js.main', 'build:js.app']);
 
-gulp.task('build:html', cb => {
+gulp.task('build:html', ['resize-images'], cb => {
     try {
         let render = requireUncached('./src/render.js').render;
 
@@ -258,3 +263,23 @@ gulp.task('log', () => {
 
     return Promise.all([log('live'), log('preview')]);
 });
+
+gulp.task('resize-images', async function () {
+    mkdirp("./.build/assets/images", async function() {
+        let data = await loadData();
+
+        for (let i in data) {
+            let image = await rp({
+                uri: data[i]["grid_photo"],
+                encoding: null
+            });
+
+            sharp(image)
+              .resize(200, 200)
+              .toFile("./.build/assets/images/" + data[i].id + ".jpg", (err, info) => {
+                if(err) console.log(err);
+              });
+        }
+    });
+});
+

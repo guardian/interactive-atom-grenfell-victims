@@ -37,3 +37,10 @@
 .dig-slice_relative{
 	position: relative;
 }
+
+.show-mobile{
+	display:block;
+	@include mq(desktop){
+		display:none;
+	}
+}

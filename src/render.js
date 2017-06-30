@@ -37,7 +37,7 @@ function formatData(data) {
 
     })
 
-  output.sort((obj1, obj2) => {return obj1.name > obj2.name});
+    output.sort((obj1, obj2) => {return obj1.name > obj2.name});
 
     
     return output;
@@ -50,10 +50,8 @@ function sortByKeys(obj) {
 
     keys.sort();
 
-   
     var a = []
     
-
     for (i = 0; i < len; i++) {
 
         let k = keys[i];
@@ -64,8 +62,6 @@ function sortByKeys(obj) {
     }
 
     return a;
-    
-
 }
 
 

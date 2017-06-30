@@ -21,8 +21,14 @@ function addListeners(){
 function openDetailContainer(elId){    
     var bannerHeaderEl = document.getElementById("bannerandheader");
     var detailScrollEl = document.getElementById('detailScroll');
+ 
+    let shim = 0;
 
-    if(bannerHeaderEl){ isElementVisible(bannerHeaderEl) ? detailScrollEl.style.paddingTop = bannerHeaderEl.offsetHeight + "px" : detailScrollEl.style.paddingTop = 0 }
+
+    if(bannerHeaderEl){ 
+      isElementVisible(bannerHeaderEl) ? detailScrollEl.style.paddingTop = bannerHeaderEl.offsetHeight + "px" : detailScrollEl.style.paddingTop = 0 ;
+      shim = bannerHeaderEl.offsetHeight;
+    }
 
     setHighLight(elId);
 
@@ -32,7 +38,7 @@ function openDetailContainer(elId){
     var parentContainerOffset = document.getElementById('detailScroll').getBoundingClientRect().top;
     var parentContainerScroll  = document.getElementById('detailScroll').scrollTop;
     var oldOffset = parentContainerScroll;
-    var newOffset = itemDetailOffset - parentContainerOffset + parentContainerScroll - bannerHeaderEl.offsetHeight;
+    var newOffset = itemDetailOffset - parentContainerOffset + parentContainerScroll - shim;
 
     //document.querySelector('.interactive-container').className += ' detail-panel-opened';
     detailOverlay.classList.add('opened');   
