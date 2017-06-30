@@ -1,11 +1,11 @@
 import rp from 'request-promise-native'
 import Handlebars from 'handlebars'
-import {groupBy,sortByKey} from './js/libs/arrayObjectUtils.js'
+import { groupBy, sortByKey } from './js/libs/arrayObjectUtils.js'
 import mainTemplate from './src/templates/main.html!text'
 import gridPicTemplate from './src/templates/gridPic.html!text'
 import detailItemTemplate from './src/templates/detailItem.html!text'
 
-let mainEl; 
+let mainEl;
 let sections;
 
 export async function render() {
@@ -16,39 +16,39 @@ export async function render() {
     return compiledHTML;
 }
 
-
-
 function formatData(data) {
 
-	let output = data.sheets.people;
+    let output = data.sheets.people;
     // let sectionsCopy = data.sheets.sectionHeads;
     let count = 0;
 
     output.map((obj) => {
         obj.ref = count;
         obj.formatName = obj.name.split(",")[0];
-        obj.grouping = obj.name.charAt(0).toUpperCase();
+        obj.sortOn = obj.name.charAt(0).toUpperCase();
         obj.id = obj.name.replace(/[^0-9a-z]/gi, '');
-        
+
         count++;
 
     })
 
-    output.sort((obj1, obj2) => {return obj1.name > obj2.name});
+    output.sort((obj1, obj2) => {
+        return obj1.name > obj2.name });
 
-    
+
     return output;
-}  
+}
 
 
 
 function sortByKeys(obj) {
-    let keys = Object.keys(obj),i, len = keys.length;
+    let keys = Object.keys(obj),
+        i, len = keys.length;
 
     keys.sort();
 
     var a = []
-    
+
     for (i = 0; i < len; i++) {
 
         let k = keys[i];
@@ -62,30 +62,29 @@ function sortByKeys(obj) {
 }
 
 
-function compileHTML(dataIn){
+function compileHTML(dataIn) {
 
-    sections = groupBy(dataIn, 'grouping'); 
+    sections = groupBy(dataIn, 'sortOn');
     sections = sortByKeys(sections);
 
-	var data = {
-        pageSections : sections
-	}
-	
+    var data = {
+        pageSections: sections
+    }
 
-	Handlebars.registerPartial({
+
+    Handlebars.registerPartial({
         'gridPic': gridPicTemplate,
         'detailItem': detailItemTemplate
     });
 
 
-    var content = Handlebars.compile( 
-                    mainTemplate,
-                        { 
-                            compat: true                        
-                        }
-            );
+    var content = Handlebars.compile(
+        mainTemplate, {
+            compat: true
+        }
+    );
 
-    var newHTML = content(data); 
+    var newHTML = content(data);
 
     return newHTML
 }

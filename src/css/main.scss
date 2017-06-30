@@ -1,46 +1,41 @@
 @import "mq";
 @import "fonts";
 @import "palette";
-
 // Uncomment for embeds
 // @import "embed";
-
 // Uncomment for full screen (including immersive article main media)
 // @import "fullscreen";
-
 @import "picGrid";
 @import "detailView";
-
 .element-atom,
 .interactive-atom {
     margin: 0 !important;
 }
 
-.gv-main-column{
-	width:100%;
-	height:auto;
-	max-width:620px;
-	@include mq(leftCol){
-		margin-left:160px;
-	}
-	@include mq(wide){
-		margin-left:240px;
-	}
-	
+.gv-main-column {
+    width: 100%;
+    height: auto;
+    max-width: 620px;
+    @include mq(leftCol) {
+        margin-left: 160px;
+    }
+    @include mq(wide) {
+        margin-left: 240px;
+    }
 }
 
-.dig-slice_fixed{
-	position: fixed;
-	top:0;
+.dig-slice_fixed {
+    position: fixed;
+    top: 0;
 }
 
-.dig-slice_relative{
-	position: relative;
+.dig-slice_relative {
+    position: relative;
 }
 
-.show-mobile{
-	display:block;
-	@include mq(desktop){
-		display:none;
-	}
+.show-mobile {
+    display: block;
+    @include mq(desktop) {
+        display: none;
+    }
 }

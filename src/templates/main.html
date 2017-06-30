@@ -1,53 +1,35 @@
- <div id="gv-content-container">
+<div id="gv-content-container">
+
+    {{#each pageSections}}
+    <section class="facewall-section">
+        <div class="gv-section-bullet-wrapper main-list-bullet" section-ref="{{sortOn}}">
+            <div class="gv-section-bullet">{{sortOn}}</div>
+        </div>
+        <div class="facewall-container">
+            {{#each objArr}} 
+            	{{> gridPic }} 
+            {{/each}}
+        </div>
+    </section>
+    {{/each}}
 
 
-		{{#each pageSections}}
-			<section class="facewall-section">
-				<div class="gv-section-bullet-wrapper main-list-bullet" section-ref="{{sortOn}}">
-					<div class="gv-section-bullet">{{sortOn}}</div>
-				</div>
-				
-				<div class="facewall-container">
+    <div class="gv-detail-overlay" id="detailOverlay">
+        <div class="gv-detail-scroll-area" id="detailScroll">
+            <div class="gv-detail-items-list" id="detailList">
+                {{#each pageSections}}
+                <div class="gv-section-bullet-wrapper show-mobile" section-ref="{{sortOn}}">
+                    <div class="gv-section-bullet">{{sortOn}}</div>
+                </div>
+		                {{#each objArr}} 
+		                	{{> detailItem }}
+		                {{/each}} 
 
-					{{#each objArr}}
-								{{> gridPic }}
-					{{/each}}
-
-				</div>
-
-			</section>
-		{{/each}}
-
-
+                {{/each}}
+            </div>
+        </div>
+        <div class="close-overlay-btn show-mobile"></div>
+    </div>
 
 
-	<div class="gv-detail-overlay" id="detailOverlay"> 
-		<div class="gv-detail-scroll-area" id="detailScroll">
-			<div class="gv-detail-items-list" id="detailList">
-				{{#each pageSections}}
-					<div class="gv-section-bullet-wrapper show-mobile" section-ref="{{sortOn}}">
-						<div class="gv-section-bullet">{{sortOn}}</div>
-					</div>
-					{{#each objArr}}
-								{{> detailItem }}
-					{{/each}}
-
-				{{/each}}
-			</div>
-
-			
-
-		</div>
-	<div class="close-overlay-btn show-mobile"></div>
-		
-	</div>
-
-
-
-
-
-
-
-
-	
 </div>

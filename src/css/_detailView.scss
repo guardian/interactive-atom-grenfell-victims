@@ -1,6 +1,5 @@
 .gv-detail-overlay{
 	position: fixed;
-
 	top:0;
 	left: 100%;
 	width:280px;
@@ -8,7 +7,8 @@
 	transform: translateX(100%);
 
 	@include mq(desktop){
-    	width:500px;
+		position: absolute;
+    	width:400px;
     }
 
 	&.opened{
@@ -27,15 +27,21 @@
 		-webkit-overflow-scrolling: touch;
 		background-color: #FFF;
     	box-shadow:-2px 0 6px rgba(0,0,0,0.2);
+
+    	@include mq(desktop){
+    		overflow:hidden;
+    		box-shadow: none;
+    		border-top: 1px solid $bullet-bg;
+    		padding:0 0 0 10px;
+
+    	}
 }
 
 .gv-detail-items-list{	
-	
-	width:280px;
-    
+	width:240px;   
 
     @include mq(desktop){
-    	width:460px;
+    	width:360px;
     }
 }
 
@@ -54,13 +60,11 @@
 		opacity: 1;
 		@include mq(desktop){
 			display: block;	
-			
+
 		}
 	}
-	// border-top: 1px solid $neutral-4;
-
-
 }
+
 .gv-detail-item:first-child{
 	border: none;
 }
