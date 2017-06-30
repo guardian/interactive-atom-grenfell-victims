@@ -9,15 +9,11 @@ let mainEl;
 let sections;
 
 export async function render() {
-    let data = formatData(await rp({
-        uri: 'https://interactive.guim.co.uk/docsdata-test/1K896qTOpgJQhG2IfGAChZ1WZjQAYn7-i869tA5cKaVU.json',
-        json: true
-    }));
+    let data = await loadData();
 
-   var compiledHTML = compileHTML(data)
+    var compiledHTML = compileHTML(data)
 
-   return compiledHTML;
-
+    return compiledHTML;
 }
 
 
@@ -32,7 +28,8 @@ function formatData(data) {
         obj.ref = count;
         obj.formatName = obj.name.split(",")[0];
         obj.grouping = obj.name.charAt(0).toUpperCase();
-       
+        obj.id = obj.name.replace(/[^0-9a-z]/gi, '');
+        
         count++;
 
     })
@@ -91,4 +88,14 @@ function compileHTML(dataIn){
     var newHTML = content(data); 
 
     return newHTML
+}
+
+// broke this out into a function so it could also be used in the gulpfile for the image resizing
+export async function loadData() {
+    let data = formatData(await rp({
+        uri: 'https://interactive.guim.co.uk/docsdata-test/1K896qTOpgJQhG2IfGAChZ1WZjQAYn7-i869tA5cKaVU.json',
+        json: true
+    }));
+
+    return data;
 }
