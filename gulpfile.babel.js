@@ -269,16 +269,18 @@ gulp.task('resize-images', async function () {
         let data = await loadData();
 
         for (let i in data) {
-            let image = await rp({
-                uri: data[i]["grid_photo"],
-                encoding: null
-            });
+            if(data[i]["grid_photo"] !== "") {
+                let image = await rp({
+                    uri: data[i]["grid_photo"],
+                    encoding: null
+                });
 
-            sharp(image)
-              .resize(200, 200)
-              .toFile("./.build/assets/images/" + data[i].id + ".jpg", (err, info) => {
-                if(err) console.log(err);
-              });
+                sharp(image)
+                  .resize(200, 200)
+                  .toFile("./.build/assets/images/" + data[i].id + ".jpg", (err, info) => {
+                    if(err) console.log(err);
+                  });
+            }
         }
     });
 });

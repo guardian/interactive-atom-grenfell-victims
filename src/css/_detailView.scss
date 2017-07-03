@@ -2,25 +2,44 @@
     position: fixed;
     top: 0;
     left: 100%;
-    width: 280px;
+    width: calc( 100% - 40px;
     height: 100%;
+    max-width: 400px;
     transform: translateX(100%);
+    z-index: 1050;
     @include mq(desktop) {
         position: absolute;
+        width: 320px;
+        height: auto;
+        min-height: 400px;
+    }
+
+    @include mq(wide) {
+        position: absolute;
         width: 400px;
-        max-height: 540px;
+        height: auto;
+        min-height: 360px;
     }
     &.opened {
         transform: translateX(-100%);
     }
 }
 
+.gv-detail-overlay.opened:before {
+    width: 20px;
+    height: 100%;
+    display: block;
+    content: '';
+    position: absolute;
+    left: -20px;
+}
+
 .gv-detail-scroll-area {
     position: absolute;
-    padding: 0 10px 0 20px;
+    padding: 0 0 120px 0;
     top: 0;
     left: 0;
-    right: 0;
+    right: 10px;
     bottom: 0;
     overflow-y: scroll;
     -webkit-overflow-scrolling: touch;
@@ -35,14 +54,20 @@
 
         &.add-border-bottom{
             border-top: none;
-            border-bottom: 1px solid $bullet-bg;
+            // border-bottom: 1px solid $bullet-bg;
         }
     }
 }
 
 .gv-detail-items-list {
-    width: 240px;
+    position:relative;
+    padding: 20px 10px 0 20px;
+    width: calc(100% - 30px);
+    
     @include mq(desktop) {
+        width: 280px;
+    }
+    @include mq(wide) {
         width: 360px;
     }
 }
@@ -50,15 +75,16 @@
 .gv-detail-item {
     display: block;
     height: auto;
-    padding-top: 12px;
+    
     margin: 0 10px 36px;
-    opacity: 0.33;
+    opacity: 0.7;
     @include mq(desktop) {
         display: none;
     }
     &.selected {
         opacity: 1;
         @include mq(desktop) {
+            padding-top: 0;
             display: block;
         }
     }
@@ -96,17 +122,19 @@
 .gv-detail-main {
     width: 100%;
     height: auto;
-    margin: 0 0 10px 0;
+    margin: 0;
     @include mq(desktop) {
         height: auto;
     }
 }
 
 .gv-detail-description {
+
     @include fs-bodyCopy(1);
     color: $neutral-2;
     @include mq(desktop) {
-        @include fs-bodyCopy(2);
+        
+        height:auto;
     }
 }
 
@@ -119,12 +147,12 @@
             color: $neutral-3;
             list-style: none;
             padding: 0;
-            margin: 0;
+            margin-right: 10px;
             display: inline-block;
             vertical-align: top;
-            margin-right: 10px;
+            
             line-height: 1.4em;
-            margin-bottom: 6px;
+            
             strong {
                 font-weight:600;
                 display: block;
@@ -154,4 +182,10 @@
     @include mq(desktop) {
         display: none;
     }
+}
+
+
+.gv-detail-text-wrapper{
+    position:relative;
+    // height:120px;
 }

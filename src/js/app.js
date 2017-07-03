@@ -24,7 +24,25 @@ function init() {
     addListeners();
 }
 
+
+function checkForScrollEnd(){
+
+
+    console.log("checkForScrollEnd")
+     if(document.body.scrollTop >= ( 
+        document.getElementById("gv-content-container").offsetTop + document.getElementById("gv-content-container").offsetHeight -300 
+        )) 
+        {
+            detailOverlay.classList.remove('opened');
+            return true;
+        }else{
+            return false
+        }
+}
+
 function addListeners() {
+
+
 
     setShim();
 
@@ -33,8 +51,15 @@ function addListeners() {
         el.addEventListener('click', () => openDetailContainer(el,elId));
     });
 
-    if(isMobile){
-       detailOverlay.addEventListener('click', function() { detailOverlay.classList.remove('opened'); });
+    document.addEventListener('scroll',  debounce(checkForScrollEnd, 100) );
+
+
+    if(!isDesktop){
+        detailOverlay.addEventListener('click', function() { detailOverlay.classList.remove('opened'); });
+
+        detailOverlay.style.top = 0;
+
+        detailOverlay.classList.remove('opened');
     }
 
     [].slice.apply(document.querySelectorAll('.cta-button-holder')).forEach(el => {
@@ -61,7 +86,7 @@ function setShim(){
 function openDetailContainer(el,elId) {
     var bannerHeaderEl = document.getElementById("bannerandheader");
     var detailScrollEl = document.getElementById('detailScroll');
-    var detailContainerEl = document.getElementById('detailOverlay');
+   // var detailContainerEl = document.getElementById('detailOverlay');
 
 
     if (bannerHeaderEl) {
@@ -77,15 +102,20 @@ function openDetailContainer(el,elId) {
     var oldOffset = parentContainerScroll;
     var newOffset = itemDetailOffset - parentContainerOffset + parentContainerScroll - shim;
 
-    console.log(shim)
     //document.querySelector('.interactive-container').className += ' detail-panel-opened';
     detailOverlay.classList.add('opened');
     document.getElementById('detailScroll').scrollTop = newOffset;
 
-    if(!isMobile){
+    //check if at end of scroll
+    let scrollback = checkForScrollEnd();
+
+    if(scrollback){ window.scrollTo( 0, document.getElementById("gv-content-container").offsetTop + document.getElementById("gv-content-container").offsetHeight -500 ); detailOverlay.classList.add('opened') }
+
+    if(isDesktop){
         detailScrollEl.style.paddingTop = 0;
-        moveDetail(el, detailContainerEl);       
+        moveDetail(el, detailOverlay);       
     }
+
 
     setHighLight(elId);
 }

@@ -25,7 +25,7 @@ function formatData(data) {
     output.map((obj) => {
         obj.ref = count;
         obj.formatName = obj.name.split(",")[0];
-        obj.sortOn = obj.name.charAt(0).toUpperCase();
+        obj.sortOn = obj.family_name.charAt(0).toUpperCase();
         !obj.age ? obj.age = "unknown" : obj.age = obj.age.toString();
         !obj.status ? obj.status = "unknown" : obj.status = obj.status.toString();
 
