@@ -1,27 +1,38 @@
 .gv-detail-overlay {
-    position: fixed;
+
     top: 0;
     left: 100%;
-    width: calc( 100% - 40px;
+    width: calc( 100% - 40px );
     height: 100%;
     max-width: 400px;
     transform: translateX(100%);
     z-index: 1050;
     @include mq(desktop) {
-        position: absolute;
+        display:none;
+        // position: absolute;
         width: 320px;
         height: auto;
         min-height: 400px;
     }
 
     @include mq(wide) {
-        position: absolute;
         width: 400px;
         height: auto;
         min-height: 360px;
     }
     &.opened {
         transform: translateX(-100%);
+
+        @include mq(desktop){
+            display:block;
+        }
+    }
+    &.fix-pos{
+        position: fixed;
+    }
+
+    &.abs-pos{
+        position: absolute;
     }
 }
 
@@ -36,10 +47,9 @@
 
 .gv-detail-scroll-area {
     position: absolute;
-    padding: 0 0 120px 0;
+    padding: 0 0 60px 0;
     top: 0;
     left: 0;
-    right: 10px;
     bottom: 0;
     overflow-y: scroll;
     -webkit-overflow-scrolling: touch;
@@ -76,10 +86,13 @@
     display: block;
     height: auto;
     
-    margin: 0 10px 36px;
+    margin: 0 0 24px;
+    padding-bottom:12px;
     opacity: 0.7;
+    border-bottom: 1px dotted $neutral-4;
     @include mq(desktop) {
         display: none;
+        border-bottom: none;
     }
     &.selected {
         opacity: 1;
@@ -88,6 +101,10 @@
             display: block;
         }
     }
+
+    &.no-border {
+        border:none;
+    }    
 }
 
 .gv-detail-item:first-child {
@@ -132,6 +149,7 @@
 
     @include fs-bodyCopy(1);
     color: $neutral-2;
+    min-height:24px;
     @include mq(desktop) {
         
         height:auto;

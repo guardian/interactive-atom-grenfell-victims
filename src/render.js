@@ -11,7 +11,7 @@ let sections;
 export async function render() {
     let data = await loadData();
 
-    var compiledHTML = compileHTML(data)
+    var compiledHTML = compileHTML(data);
 
     return compiledHTML;
 }
@@ -25,6 +25,7 @@ function formatData(data) {
     output.map((obj) => {
         obj.ref = count;
         obj.formatName = obj.name.split(",")[0];
+        obj.sortName = obj.family_name+obj.formatName;
         obj.sortOn = obj.family_name.charAt(0).toUpperCase();
         !obj.age ? obj.age = "unknown" : obj.age = obj.age.toString();
         !obj.status ? obj.status = "unknown" : obj.status = obj.status.toString();
@@ -32,12 +33,17 @@ function formatData(data) {
         obj.id = obj.name.replace(/[^0-9a-z]/gi, '');
 
         count++;
-
     })
 
-    output.sort((obj1, obj2) => {
-        return obj1.name > obj2.name });
 
+    output.sort(function(a, b){
+    if(a.sortName < b.sortName) return -1;
+    if(a.sortName > b.sortName) return 1;
+    return 0;
+})
+
+
+    
 
     return output;
 }
@@ -74,6 +80,17 @@ function compileHTML(dataIn) {
         pageSections: sections
     }
 
+    
+
+    var sortStr = data.pageSections[0].sortOn;
+    data.pageSections.map((obj) => {
+        var last = obj.objArr.length - 1;
+        obj.objArr[last].lastItem = true;
+
+        console.log(obj.objArr[last])
+
+    })
+    
 
     Handlebars.registerPartial({
         'gridPic': gridPicTemplate,

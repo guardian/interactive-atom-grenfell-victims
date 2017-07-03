@@ -1,106 +1,113 @@
 import debounce from 'javascript-debounce'
 
-let detailOverlay, mainContainer, windowWidth, shim;
+let detailOverlay, mainContainer, windowWidth;
 let isInApp = false;
 
-if(!window){
-    windowWidth = 460;
+if (!window) {
+    windowWidth = 459;
     isInApp = true;
-}else{
-    window.onresize = delayedAdjust;
+} else {
     windowWidth = window.innerWidth;
 }
-var isMobile = windowWidth < 460 ? true : false;
-var isTablet = windowWidth > 459 && windowWidth < 980 ? true : false;
-var isDesktop = windowWidth > 979 ? true : false;
+
+var isMobile;
+var isTablet;
+var isDesktop;
 
 
-var delayedAdjust = debounce(addListeners, 1000);
 
 
 function init() {
     detailOverlay = document.getElementById("detailOverlay");
     mainContainer = document.getElementById("gv-content-container");
+    adjustToWinSize();
     addListeners();
 }
 
-
-function checkForScrollEnd(){
-
+function checkForScrollEnd() {
 
     console.log("checkForScrollEnd")
-     if(document.body.scrollTop >= ( 
-        document.getElementById("gv-content-container").offsetTop + document.getElementById("gv-content-container").offsetHeight -300 
-        )) 
-        {
-            detailOverlay.classList.remove('opened');
-            return true;
-        }else{
-            return false
-        }
+    if (document.body.scrollTop >= (document.getElementById("gv-content-container").offsetTop + document.getElementById("gv-content-container").offsetHeight - 300))
+    {
+        detailOverlay.classList.remove('opened');
+        return true;
+    } else {
+        return false
+    }
+}
+
+function resetHighlight(){
+    [].slice.apply(document.getElementsByClassName('item-photo selected')).forEach(el => {
+        el.classList.remove('selected');
+    });
+}
+
+function adjustToWinSize(){
+    windowWidth = window.innerWidth;
+
+    if(windowWidth < 460) { isMobile =  true; isTablet = false; isDesktop = false; }
+    else if(windowWidth > 459 && windowWidth < 980) { isMobile =  false; isTablet = true; isDesktop = false; } 
+    else if(windowWidth > 979 ) { isMobile =  false; isTablet = false; isDesktop = true; }
+
+    if (isMobile || isTablet) { 
+        detailOverlay.classList.remove("abs-pos"); 
+        detailOverlay.classList.add("fix-pos"); 
+        detailOverlay.style.top = "0px"; 
+    }
+    if (isDesktop) { 
+        detailOverlay.classList.remove("fix-pos"); 
+        detailOverlay.classList.add("abs-pos"); 
+    } 
+
+    resetHighlight();
+}
+
+
+function afterResize(){
+
+    adjustToWinSize()
+
+    addListeners() 
+
+    detailOverlay.classList.remove('opened');
 }
 
 function addListeners() {
 
-
-
-    setShim();
-
     [].slice.apply(document.querySelectorAll('.facewall-item')).forEach(el => {
         var elId = el.getAttribute("id");
-        el.addEventListener('click', () => openDetailContainer(el,elId));
+        el.addEventListener('click', () => openDetailContainer(el, elId));
     });
 
-    document.addEventListener('scroll',  debounce(checkForScrollEnd, 100) );
+    document.addEventListener('scroll', debounce(checkForScrollEnd, 100));
 
+    detailOverlay.addEventListener('click', function() { detailOverlay.classList.remove('opened'); });
 
-    if(!isDesktop){
-        detailOverlay.addEventListener('click', function() { detailOverlay.classList.remove('opened'); });
-
-        detailOverlay.style.top = 0;
-
-        detailOverlay.classList.remove('opened');
-    }
 
     [].slice.apply(document.querySelectorAll('.cta-button-holder')).forEach(el => {
-          el.addEventListener('click', () => window.open(el.getAttribute("data-link")) );
+        el.addEventListener('click', () => window.open(el.getAttribute("data-link")));
     });
+     
+     if(window){
+        window.addEventListener("resize", debounce(afterResize, 500) );
 
-    
+     }
+     
+
 }
 
 
-var isMobile = windowWidth < 460 ? true : false;
-var isTablet = windowWidth > 459 && windowWidth < 980 ? true : false;
-var isDesktop = windowWidth > 979 ? true : false;
-
-function setShim(){
-    let newShim = 0;
-    if(isMobile) { newShim = 84 }
-    if(isTablet) { newShim = 109 }
-    if(isDesktop) { newShim = 0 }
-
-    return newShim;
-}
-
-function openDetailContainer(el,elId) {
+function openDetailContainer(el, elId) {
     var bannerHeaderEl = document.getElementById("bannerandheader");
     var detailScrollEl = document.getElementById('detailScroll');
-   // var detailContainerEl = document.getElementById('detailOverlay');
+    // var detailContainerEl = document.getElementById('detailOverlay');
 
-
-    if (bannerHeaderEl) {
-        isElementVisible(bannerHeaderEl) ? detailScrollEl.style.paddingTop = bannerHeaderEl.offsetHeight + "px" : detailScrollEl.style.paddingTop = 0;
-        shim = bannerHeaderEl.offsetHeight;
-    }
-
-   
     var itemDetailEl = document.getElementById('detailItem_' + elId.split("_")[1]);
     var itemDetailOffset = itemDetailEl.getBoundingClientRect().top;
     var parentContainerOffset = document.getElementById('detailScroll').getBoundingClientRect().top;
     var parentContainerScroll = document.getElementById('detailScroll').scrollTop;
     var oldOffset = parentContainerScroll;
-    var newOffset = itemDetailOffset - parentContainerOffset + parentContainerScroll - shim;
+    var newOffset = itemDetailOffset - parentContainerOffset + parentContainerScroll - 36;
 
     //document.querySelector('.interactive-container').className += ' detail-panel-opened';
     detailOverlay.classList.add('opened');
@@ -109,38 +116,34 @@ function openDetailContainer(el,elId) {
     //check if at end of scroll
     let scrollback = checkForScrollEnd();
 
-    if(scrollback){ window.scrollTo( 0, document.getElementById("gv-content-container").offsetTop + document.getElementById("gv-content-container").offsetHeight -500 ); detailOverlay.classList.add('opened') }
-
-    if(isDesktop){
-        detailScrollEl.style.paddingTop = 0;
-        moveDetail(el, detailOverlay);       
+    if (!isDesktop && scrollback) { window.scrollTo(0, document.getElementById("gv-content-container").offsetTop + document.getElementById("gv-content-container").offsetHeight - 500);
+        detailOverlay.classList.add('opened') 
     }
 
+
+    if (isDesktop) { 
+        detailOverlay.style.paddingTop = 0;
+        moveDetail(el, detailOverlay);
+    }
 
     setHighLight(elId);
 }
 
 
-function moveDetail(el, detailContainerEl){
-    let sectionRef = (el.getAttribute("section-ref") );
+function moveDetail(el, detailContainerEl) {
+    let sectionRef = (el.getAttribute("section-ref"));
 
     [].slice.apply(document.querySelectorAll('.main-list-bullet')).forEach(sectionEl => {
         var elRef = sectionEl.getAttribute("section-ref");
-        if(elRef == sectionRef){ 
-          detailScroll.classList.remove("add-border-bottom")
-          detailContainerEl.style.top = (sectionEl.offsetTop+12) +"px" ;
-          if(( sectionEl.offsetTop + detailContainerEl.offsetHeight ) > mainContainer.offsetHeight){ 
-
-              detailScroll.classList.add("add-border-bottom")
-              detailContainerEl.style.top =  (  ((sectionEl.offsetTop -  detailContainerEl.offsetHeight )+13)   +"px"   )
-          
-          }
-
-      }
-       
-        
+        if (elRef == sectionRef) {
+            detailScroll.classList.remove("add-border-bottom")
+            detailContainerEl.style.top = (sectionEl.offsetTop + 12) + "px";
+            if ((sectionEl.offsetTop + detailContainerEl.offsetHeight) > mainContainer.offsetHeight) {
+                detailScroll.classList.add("add-border-bottom")
+                detailContainerEl.style.top = (((sectionEl.offsetTop - detailContainerEl.offsetHeight) + 13) + "px")
+            }
+        }
     });
-
 
 }
 
@@ -150,7 +153,8 @@ function isElementVisible(el) {
         vWidth = window.innerWidth || doc.documentElement.clientWidth,
         vHeight = window.innerHeight || doc.documentElement.clientHeight,
         efp = function(x, y) {
-            return document.elementFromPoint(x, y) };
+            return document.elementFromPoint(x, y)
+        };
 
     return (rect.height * -1 < rect.top)
 }
