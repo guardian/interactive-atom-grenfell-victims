@@ -176,6 +176,10 @@
                 display: block;
             }
         }
+
+        li:before{
+            display:none !important;
+        }
     }
 }
 

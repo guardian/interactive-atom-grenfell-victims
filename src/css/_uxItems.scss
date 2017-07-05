@@ -1,12 +1,12 @@
 .close-overlay-btn {
     width: 44px;
     height: 44px;
-    background-color: #333;
+    background-color: $selected-color;;
     background-image: url('<%= path %>/assets/arrow.svg');
     border-radius: 9999px;
     position: absolute;
-    bottom: 48px;
-    left: -21px;
+    bottom: 72px;
+    left: -24px;
     background-size: 60%;
     background-repeat: no-repeat;
     background-position: center;
@@ -15,7 +15,7 @@
 }
 
 .close-overlay-btn:hover {
-    background-color: $selected-color;
+    background-color: $selected-color-support; 
 }
 
 
