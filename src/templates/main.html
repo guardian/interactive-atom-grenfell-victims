@@ -1,5 +1,37 @@
 <div id="gv-content-container">
 
+    <section class="intro-section">
+
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore  {{totalCount}} people listed so far</p> 
+
+        <h3>By age</h3> 
+        <ul>
+        {{#each ageGroups}}
+            <li>
+                 {{{ html_decoder ageGroupStr }}}: 
+                 <span class="highlight-span">{{count}}</span>
+        
+            </li>{{/each}}
+
+        </ul>
+
+        <h3>By status</h3> 
+        <ul>
+        {{#each statusCounts}}
+            <li>
+                 
+                 {{sortOn}}: <span class="highlight-span">{{ count }} </span>
+
+            </li>
+        {{/each}}
+        </ul>    
+
+
+    
+
+
+    </section>    
+
     {{#each pageSections}}
     <section class="facewall-section">
         <div class="gv-section-bullet-wrapper main-list-bullet" section-ref="{{sortOn}}">
