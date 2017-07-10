@@ -68,7 +68,6 @@
 			margin-bottom:4px;
 			position: relative;
 			border-radius:1000px;
-			background-color:$facewall-bg;
 			cursor:pointer;
 
 
@@ -78,7 +77,7 @@
 				background:$facewall-bg;
 				background-size:cover;
 				background-position: center;
-				border: 3px solid $selected-color;
+				border: 3px solid #FFF;
 				border-radius:99999px;
 				-webkit-filter: grayscale(100%); /* Safari 6.0 - 9.0 */
     			filter: grayscale(100%);
@@ -86,6 +85,7 @@
     			&.selected{
     				-webkit-filter: none; /* Safari 6.0 - 9.0 */
     				filter: none;
+    				border: 3px solid $selected-color;
     				
     			}
 

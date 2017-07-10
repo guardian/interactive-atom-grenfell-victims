@@ -27,7 +27,7 @@
 		p{
 			@include fs-headline(3);
 			color: $neutral-2; //$neutral-2 same as standard standfirst
-			margin-bottom: 18px;
+			margin-bottom: 12px;
 			font-size: 18px;
 			line-height: 22px;
 
@@ -37,9 +37,10 @@
 	    ul {
 	        margin: 0;
 	        padding: 0;
+	        margin-bottom: 12px;
 	        li {
 	            @include fs-textSans(3);
-	            color: $neutral-3;
+	            color: $neutral-2;
 	            list-style: none;
 	            padding: 0;
 	            margin-right: 10px;
@@ -48,8 +49,9 @@
 	            line-height: 1.4em;
 
 	            @include mq(desktop){
-	            	@include fs-headline(1);
-	            	line-height: 20px;
+	            	@include fs-headline(2);
+	            	font-size:18px;
+	            	line-height: 22px;
 	            }
 	            
 	            

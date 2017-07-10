@@ -28,10 +28,13 @@ function formatData(data) {
         obj.sortName = obj.family_name + obj.formatName;
         obj.sortOn = obj.family_name.charAt(0).toUpperCase();
         !obj.age ? obj.age = "unknown" : obj.age = obj.age.toString();
-        !obj.status ? obj.status = "Status unknown" : obj.status = obj.status.toString();
+        !obj.status ? obj.status = "unknown" : obj.status = obj.status.toString().toLowerCase();
+        !obj.floor ? obj.floor = "unknown" : obj.floor = obj.floor;
         obj.ageGroup = getAgeGroup(obj.age);
 
         obj.id = obj.name.replace(/[^0-9a-z]/gi, '');
+
+        console.log(obj.floor);
 
         count++;
     })
@@ -82,7 +85,6 @@ function getAgeGroup(age) {
         if (age > 65) { ageGroup = "over 65" }
     }
    
-
     return ageGroup;
 }
 
@@ -99,10 +101,8 @@ function getAgeGroupStr(obj) {
         else if (ageGroup == "34-44"){ ageGroupStr = "aged&nbsp;34–44" }
         else if (ageGroup == "45-65"){ ageGroupStr = "aged&nbsp;45–65" }
         else if (ageGroup == "over 65"){ ageGroupStr = "over&nbsp;65" }
-        else if (ageGroup == "unknown"){ ageGroupStr = "age&nbsp;unknown" }
+        else if (ageGroup == "unknown"){ ageGroupStr = "unknown" }
     
-    console.log(ageGroupStr)
-
     return ageGroupStr;
 }
 
