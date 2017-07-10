@@ -12,7 +12,6 @@ export async function render() {
     let data = await loadData();
 
     var compiledHTML = compileHTML(data);
-
     return compiledHTML;
 }
 
